@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script>
+$(function() {
+	$('#go').click(function() {
+		$('#page-1').hide();
+		$('#page-2').show();
+		
+		var blocks = JSON.parse($('#blocks-json').val());
+		var palette = JSON.parse($('#palette-json').val());
+		
+		console.log(blocks);
+		console.log(palette);
+		
+		for(var mod in blocks) {
+			var m = blocks[mod];
+			$('select.module').append('<option>' + mod + '</option>');
+		}
+		
+		for(var i in palette) {
+			var p = palette[i];
+			
+			if(p.type == 'palette') {
+				console.log(p.name);
+				var html;
+				html = $.parseHTML($('#palette-table').html());
+				$(html).find('th.title').append(p.name);
+				$('#page-2').append(html);
+			}
+		}
+	});
+});
+</script>
+
+<style>
+textarea {
+	width: 800px;
+	height: 200px;
+}
+
+#page-2 {
+	display: none;
+}
+
+#palette-table, #palette-row {
+	display: none;
+}
+
+tr, th {
+	text-align: left;
+	vertical-align: top;
+	border: 1px solid black;
+}
+
+table {
+	width: 50%;
+	border-collapse: collapse;
+	margin-bottom: 1em;
+}
+</style>
+
+</head>
+<body>
+
+<div id='palette-table'>
+<table>
+<thead>
+<tr>
+ <th colspan='3' class='title'></th>
+</tr>
+<tr>
+ <th>Char</th>
+ <th>Block</th>
+ <th>Damaged</th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div>
+
+<div id='palette-row'>
+<table>
+<tbody>
+<tr class='row'>
+ <td><input class='char' size='2'></td>
+ <td class='block'>
+  <select class='module'><option></option></select>
+  <select class='block'><option></option></select>
+ </td>
+ <td class='damaged'>
+  <select class='module'><option></option></select>
+  <select class='block'><option></option></select>
+ </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div id='page-1'>
+<p>
+tellme dump-json output:<br>
+<textarea id='blocks-json' name='blocks-json'></textarea>
+</p>
+
+<p>
+Palette file:<br>
+<textarea id='palette-json' name='palette-json'></textarea>
+</p>
+
+<button id='go'>Go</button>
+</div>
+
+<div id='page-2'>
+</div>
+</body>
+</html>
